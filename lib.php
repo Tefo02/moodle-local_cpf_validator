@@ -73,7 +73,7 @@ function local_cpf_validator_signup_form_validation($data, $files) {
     if (!local_cpf_validator_validateCPF($cpf)) {
         // If the CPF is invalid, add an error to the 'username' field.
         // Using get_string to retrieve the message from the language file.
-        $errors['username'] = get_string('invalidcpf', 'local_cpfvalidator');
+        $errors['username'] = get_string('invalidcpf', 'local_cpf_validator');
     }
     
     return $errors;
