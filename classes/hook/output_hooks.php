@@ -25,3 +25,29 @@
 namespace local_cpf_validator\hook;
 
 defined('MOODLE_INTERNAL') || die();
+
+/**
+ * Class containing the hook callbacks for output related events.
+ *
+ * @package   local_cpf_validator
+ * @copyright 2025 Your Name
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class output_hooks {
+    /**
+     * Hook callback executed before the footer is rendered.
+     * We use this to add our AMD JavaScript module to the signup page.
+     *
+     * @param \core\hook\output\before_footer_html_generation $hook The hook instance.
+     * @return void
+     */
+    public static function before_footer(\core\hook\output\before_footer_html_generation $hook): void {
+        global $PAGE;
+
+        // Check if the current page is the signup page.
+        if (strpos($PAGE->url->get_path(), '/login/signup.php') !== false) {
+            // If it is, require our AMD module and call its 'init' function.
+            $PAGE->requires->js_call_amd('local_cpf_validator/validator', 'init');
+        }
+    }
+}
