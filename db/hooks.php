@@ -23,3 +23,12 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+
+// This file defines the event observers (hooks) for this plugin.
+$hooks = [
+    // The name of the hook we want to listen to.
+    'core\\hook\\output\\before_footer_html_generation' => [
+        // The callback to execute when the hook is triggered.
+        'callback' => 'local_cpf_validator\\hook\\output_hooks::before_footer',
+    ],
+];
