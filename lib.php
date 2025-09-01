@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die();
  * @param string $cpf The CPF number to validate.
  * @return bool True if the CPF is valid, false otherwise.
  */
-function local_cpfvalidator_validateCPF($cpf) {
+function local_cpf_validator_validateCPF($cpf) {
     // Remove any non-numeric characters
     $cpf = preg_replace('/[^0-9]/is', '', $cpf);
 
