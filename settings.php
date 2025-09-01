@@ -24,12 +24,3 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-
-if ($hassiteconfig) {
-    $settings = new admin_settingpage('local_cpf_validator_settings', new lang_string('pluginname', 'local_cpf_validator'));
-
-    // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
-    if ($ADMIN->fulltree) {
-        // TO-DO: Define actual plugin settings page and add it to the tree - {@link https://docs.moodle.org/dev/Admin_settings}.
-    }
-}
