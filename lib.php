@@ -78,17 +78,3 @@ function local_cpf_validator_signup_form_validation($data, $files) {
     
     return $errors;
 }
-
-/**
- * Function executed before rendering the footer of every page.
- * We use this to load our JavaScript on the signup page.
- */
-function local_cpf_validator_before_footer() {
-    global $PAGE;
-
-    // The signup page URL ends with /login/signup.php
-    if (strpos($PAGE->url->get_path(), '/login/signup.php') !== false) {
-        // Request Moodle to load our AMD module and call the 'init' function.
-        $PAGE->requires->js_call_amd('local_cpfvalidator/validator', 'init');
-    }
-}
