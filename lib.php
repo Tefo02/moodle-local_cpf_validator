@@ -25,12 +25,12 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * PHP function to validate a CPF number.
+ * Validates a Brazilian CPF number.
  *
  * @param string $cpf The CPF number to validate.
  * @return bool True if the CPF is valid, false otherwise.
  */
-function local_cpf_validator_validateCPF($cpf) {
+function local_cpf_validator_validate_cpf(string $cpf): bool {
     // Remove any non-numeric characters
     $cpf = preg_replace('/[^0-9]/is', '', $cpf);
 
@@ -65,14 +65,16 @@ function local_cpf_validator_validateCPF($cpf) {
  * @param array $files The uploaded files.
  * @return array An array of errors. If empty, validation passed.
  */
-function local_cpf_validator_signup_form_validation($data, $files) {
-    $errors = array();
+function local_cpf_validator_signup_form_validation(array $data, array $files): array {
+    debugging('CPF VALIDATION HOOK: Execution started.', DEBUG_DEVELOPER);
+    
+    $errors = [];
     
     $cpf = $data['username']; // Using the 'username' field for the CPF
     
-    if (!local_cpf_validator_validateCPF($cpf)) {
+    if (!local_cpf_validator_validate_cpf($cpf)) {
         // If the CPF is invalid, add an error to the 'username' field.
-        // Using get_string to retrieve the message from the language file.
+        debugging('CPF VALIDATION HOOK: CPF is invalid, blocking submission.', DEBUG_DEVELOPER);
         $errors['username'] = get_string('invalidcpf', 'local_cpf_validator');
     }
     

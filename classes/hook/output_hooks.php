@@ -43,10 +43,7 @@ class output_hooks {
      */
     public static function before_footer(\core\hook\output\before_footer_html_generation $hook): void {
         global $PAGE;
-
-        // Check if the current page is the signup page.
         if (strpos($PAGE->url->get_path(), '/login/signup.php') !== false) {
-            // If it is, require our AMD module and call its 'init' function.
             $PAGE->requires->js_call_amd('local_cpf_validator/validator', 'init');
         }
     }
