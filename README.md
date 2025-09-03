@@ -28,7 +28,7 @@ git clone https://github.com/Tefo02/moodle-local_cpf_validator.git cpf_validator
 
 ## Requirements
 
-- Moodle 3.9 or higher (may also work on earlier versions with minor changes).
+- Moodle 4.3 or higher (may also work on earlier versions with minor changes).
 - PHP 7.3+
 
 ## Usage
