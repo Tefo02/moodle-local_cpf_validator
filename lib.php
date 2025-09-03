@@ -25,28 +25,42 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Validates a Brazilian CPF number.
+ * Extra validation hook for the Moodle signup form.
+ * Validates that the username field contains a valid CPF.
  *
- * @param string $cpf The CPF number to validate.
- * @return bool True if the CPF is valid, false otherwise.
+ * @param array $data Form data.
+ * @return array List of errors in the format ['field' => 'message'].
  */
-function local_cpf_validator_validate_cpf(string $cpf): bool {
+function local_cpf_validator_validate_extend_signup_form($data) {
+    $errors = [];
+
+    if (empty($data['username'])) {
+        $errors['username'] = get_string('invalidcpf', 'local_cpf_validator');
+    } else if (!local_cpf_validator_validate_cpf($data['username'])) {
+        $errors['username'] = get_string('invalidcpf', 'local_cpf_validator');
+    }
+
+    return $errors;
+}
+
+/**
+ * Helper function to validate a CPF number.
+ *
+ * @param string $cpf
+ * @return bool
+ */
+function local_cpf_validator_validate_cpf($cpf) {
     // Remove any non-numeric characters
-    $cpf = preg_replace('/[^0-9]/is', '', $cpf);
+    $cpf = preg_replace('/[^0-9]/', '', $cpf);
 
-    // CPF must have 11 digits
-    if (strlen($cpf) != 11) {
+    // Must have 11 digits and not be all identical
+    if (strlen($cpf) != 11 || preg_match('/^(.)\1{10}$/', $cpf)) {
         return false;
     }
 
-    // Reject CPFs with all digits equal (e.g. 11111111111)
-    if (preg_match('/(\d)\1{10}/', $cpf)) {
-        return false;
-    }
-
-    // Validate first and second verification digits
     for ($t = 9; $t < 11; $t++) {
-        for ($d = 0, $c = 0; $c < $t; $c++) {
+        $d = 0;
+        for ($c = 0; $c < $t; $c++) {
             $d += $cpf[$c] * (($t + 1) - $c);
         }
         $d = ((10 * $d) % 11) % 10;
@@ -56,27 +70,4 @@ function local_cpf_validator_validate_cpf(string $cpf): bool {
     }
 
     return true;
-}
-
-/**
- * Function used by Moodle to validate the signup form.
- *
- * @param array $data The submitted form data.
- * @param array $files The uploaded files.
- * @return array An array of errors. If empty, validation passed.
- */
-function local_cpf_validator_signup_form_validation(array $data, array $files): array {
-    debugging('CPF VALIDATION HOOK: Execution started.', DEBUG_DEVELOPER);
-    
-    $errors = [];
-    
-    $cpf = $data['username']; // Using the 'username' field for the CPF
-    
-    if (!local_cpf_validator_validate_cpf($cpf)) {
-        // If the CPF is invalid, add an error to the 'username' field.
-        debugging('CPF VALIDATION HOOK: CPF is invalid, blocking submission.', DEBUG_DEVELOPER);
-        $errors['username'] = get_string('invalidcpf', 'local_cpf_validator');
-    }
-    
-    return $errors;
 }
