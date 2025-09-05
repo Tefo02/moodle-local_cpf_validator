@@ -37,7 +37,6 @@ Once installed, the CPF validator will automatically run on user registration an
 
 Accepted formats:
 - `12345678909`
-- `123.456.789-09`
 
 Invalid CPF numbers will trigger a validation error and prevent form submission.
 
