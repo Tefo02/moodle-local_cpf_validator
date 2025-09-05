@@ -25,15 +25,14 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Validador de CPF';
+$string['error_cpf_format_numeric'] = 'O CPF deve conter apenas 11 números.';
+$string['error_cpf_format_special_chars'] = 'O CPF deve estar no formato 000.000.000-00.';
+$string['error_cpf_invalid'] = 'O CPF é matematicamente inválido. Por favor, verifique os dígitos.';
+$string['error_cpf_required'] = 'O campo CPF é obrigatório.';
 $string['format_rules'] = 'Formato de Entrada';
 $string['format_rules_desc'] = 'Escolha o formato de entrada para o CPF (números, números com ponto e hífen, etc).';
 $string['numeric_only'] = 'Apenas Números';
 $string['numeric_with_special_chars'] = 'Números + Ponto e Hífen';
 $string['numeric_with_special_chars_and_clean'] = 'Números + Ponto e Hífen (apenas números serão salvos)';
+$string['pluginname'] = 'Validador de CPF';
 $string['settings'] = 'Configurações do Validador de CPF';
-
-$string['error_cpf_required'] = 'O campo CPF é obrigatório.';
-$string['error_cpf_invalid'] = 'O CPF é matematicamente inválido. Por favor, verifique os dígitos.';
-$string['error_cpf_format_numeric'] = 'O CPF deve conter apenas 11 números.';
-$string['error_cpf_format_special_chars'] = 'O CPF deve estar no formato 000.000.000-00.';

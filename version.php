@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_cpf_validator';
-$plugin->release = '0.1.0';
-$plugin->version = 2025090310;
-$plugin->requires = 2020061500;
-$plugin->maturity = MATURITY_ALPHA;
+$plugin->release   = 'v1.0.0';
+$plugin->version   = 2025090500;
+$plugin->requires  = 2023100900;
+$plugin->maturity  = MATURITY_STABLE;

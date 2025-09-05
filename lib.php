@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - https://moodle.org/
+// This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,31 +12,39 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Library file for local_cpf_validator plugin.
+ * Library file for the local_cpf_validator plugin.
  *
- * @package     local_cpf_validator
- * @copyright   2025 Stefano Lopes Delgado <stefanolopes84@gmail.com>
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * This file contains the legacy callbacks used by the plugin for validation
+ * and data modification during the user signup process.
+ *
+ * @package    local_cpf_validator
+ * @copyright  2025 Stefano Lopes Delgado <stefanolopes84@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Hook to VALIDATE the Moodle signup form.
- * This function only returns errors. It does not change the data.
+ * Extra validation hook for the Moodle signup form.
+ *
+ * This function is a Moodle legacy callback, triggered during the signup
+ * form validation process. It checks the 'username' field against CPF rules.
+ *
+ * @param  array $data The raw data submitted in the form, as an associative array.
+ * @return array An array of errors. An empty array means validation passed.
  */
-function local_cpf_validator_validate_extend_signup_form($data) {
+function local_cpf_validator_validate_extend_signup_form(array $data): array {
     $errors = [];
 
     if (empty($data['username'])) {
         $errors['username'] = get_string('error_cpf_required', 'local_cpf_validator');
     } else {
-        $errorstring = local_cpf_validator_validate_cpf($data['username']);
-        if ($errorstring !== true) {
-            $errors['username'] = get_string($errorstring, 'local_cpf_validator');
+        $validationresult = local_cpf_validator_validate_cpf($data['username']);
+        if ($validationresult !== true) {
+            $errors['username'] = get_string($validationresult, 'local_cpf_validator');
         }
     }
 
@@ -44,43 +52,49 @@ function local_cpf_validator_validate_extend_signup_form($data) {
 }
 
 /**
- * Hook to MODIFY user data after validation but before creation.
- * This function runs only if the validation above passes.
+ * Hook to modify user data after validation but before user creation.
  *
- * @param stdClass &$user The user object, passed by reference.
+ * This function is a Moodle legacy callback that runs after form validation
+ * is successful. It is used here to clean the CPF number before it is
+ * saved to the database if the corresponding setting is enabled.
+ *
+ * @param  stdClass &$user The user data object, passed by reference.
+ * @return void
  */
-function local_cpf_validator_post_signup_requests(&$user) {
-    // Check if the setting to clean the CPF is enabled.
+function local_cpf_validator_post_signup_actions(stdClass &$user): void {
     if (get_config('local_cpf_validator', 'format_rules') === 'numeric_with_special_chars_and_clean') {
         if (isset($user->username)) {
-            // Clean the username (CPF) by removing non-digit characters.
+            // Because $user is passed by reference, this change becomes permanent for the user creation process.
             $user->username = preg_replace('/[^\d]/', '', $user->username);
         }
     }
 }
 
 /**
- * Helper function to validate a CPF number.
+ * Helper function to validate a Brazilian CPF number.
  *
- * @param string $cpf
- * @return bool|string True if valid, or a string identifier for the error.
+ * This function checks both the format (based on admin settings) and the
+ * mathematical validity (check digits) of the CPF.
+ *
+ * @param  string $cpf The CPF string to be validated.
+ * @return bool|string Returns true if the CPF is valid, otherwise returns the
+ * language string identifier for the specific error.
  */
-function local_cpf_validator_validate_cpf($cpf) {
+function local_cpf_validator_validate_cpf(string $cpf): bool|string {
     $originalcpf = $cpf;
     $cleancpf = preg_replace('/[^\d]/', '', $originalcpf);
+    $formatrules = get_config('local_cpf_validator', 'format_rules');
 
-    $format_rules = get_config('local_cpf_validator', 'format_rules');
-
-    if ($format_rules == 'numeric_with_special_chars') {
+    if ($formatrules == 'numeric_with_special_chars') {
         if (!preg_match('/^\d{3}\.\d{3}\.\d{3}-\d{2}$/', $originalcpf)) {
-            return 'error_cpf_format_special_chars'; 
+            return 'error_cpf_format_special_chars';
         }
-    } else if ($format_rules == 'numeric_only') {
+    } else if ($formatrules == 'numeric_only') {
         if (!preg_match('/^\d{11}$/', $originalcpf)) {
-            return 'error_cpf_format_numeric'; 
+            return 'error_cpf_format_numeric';
         }
     }
-    
+
     if (strlen($cleancpf) != 11 || preg_match('/^(.)\1{10}$/', $cleancpf)) {
         return 'error_cpf_invalid';
     }

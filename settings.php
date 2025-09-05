@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - https://moodle.org/
+// This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,42 +15,39 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin administration pages are defined here.
+ * Settings for the CPF Validator plugin.
  *
- * @package     local_cpf_validator
- * @category    admin
- * @copyright   2025 Stefano Lopes Delgado <stefanolopes84@gmail.com>
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    local_cpf_validator
+ * @copyright  2025 Stefano Lopes Delgado <stefanolopes84@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-// This line ensures that this page is only accessible to users who can manage site settings.
+// This line ensures that this code only runs for users who have permission to configure the site.
 if ($hassiteconfig) {
-    // Create the main settings page object.
-    // 'local_cpf_validator' is the component name.
-    // get_string('pluginname', 'local_cpf_validator') sets the title of the page.
+    // Creates a new settings page and adds it to the "Local plugins" category.
     $settings = new admin_settingpage(
-        'local_cpf_validator',
-        get_string('pluginname',
-        'local_cpf_validator'));
+        'local_cpf_validator_settings',
+        get_string('pluginname', 'local_cpf_validator')
+    );
 
-    // Create the setting itself - a dropdown menu (configselect).
+    // Creates the dropdown menu setting for the CPF format rules.
     $setting = new admin_setting_configselect(
-        'local_cpf_validator/format_rules',                             // The unique name of the setting
-        get_string('format_rules', 'local_cpf_validator'),              // The label for the setting
-        get_string('format_rules_desc', 'local_cpf_validator'),         // The description/help text
-        'numeric_with_special_chars_and_clean',                         // The default value
-        [                                                               // The options for the dropdown
+        'local_cpf_validator/format_rules',
+        get_string('format_rules', 'local_cpf_validator'),
+        get_string('format_rules_desc', 'local_cpf_validator'),
+        'numeric_with_special_chars_and_clean',
+        [
             'numeric_with_special_chars_and_clean' => get_string('numeric_with_special_chars_and_clean', 'local_cpf_validator'),
             'numeric_with_special_chars' => get_string('numeric_with_special_chars', 'local_cpf_validator'),
             'numeric_only' => get_string('numeric_only', 'local_cpf_validator'),
         ]
     );
 
-    // Add the setting to our page.
+    // Adds the setting to the page.
     $settings->add($setting);
 
-    // Add the page to the 'localplugins' category in the admin menu.
+    // Adds the settings page to the admin navigation tree.
     $ADMIN->add('localplugins', $settings);
 }

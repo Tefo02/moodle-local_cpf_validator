@@ -15,16 +15,17 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Hooks for local_cpf_validator plugin.
+ * Capabilities for the local_cpf_validator plugin.
  *
- * @package     local_cpf_validator
- * @copyright   2025 Stefano Lopes Delgado <stefanolopes84@gmail.com>
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    local_cpf_validator
+ * @copyright  2025 Stefano Lopes Delgado <stefanolopes84@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = [
+    // Capability to manage the settings of this plugin.
     'local/cpf_validator:settings' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
