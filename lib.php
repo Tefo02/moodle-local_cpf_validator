@@ -25,50 +25,74 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Extra validation hook for the Moodle signup form.
- * Validates that the username field contains a valid CPF.
- *
- * @param array $data Form data.
- * @return array List of errors in the format ['field' => 'message'].
+ * Hook to VALIDATE the Moodle signup form.
+ * This function only returns errors. It does not change the data.
  */
 function local_cpf_validator_validate_extend_signup_form($data) {
     $errors = [];
 
     if (empty($data['username'])) {
-        $errors['username'] = get_string('invalidcpf', 'local_cpf_validator');
-    } else if (!local_cpf_validator_validate_cpf($data['username'])) {
-        $errors['username'] = get_string('invalidcpf', 'local_cpf_validator');
+        $errors['username'] = get_string('error_cpf_required', 'local_cpf_validator');
+    } else {
+        $errorstring = local_cpf_validator_validate_cpf($data['username']);
+        if ($errorstring !== true) {
+            $errors['username'] = get_string($errorstring, 'local_cpf_validator');
+        }
     }
 
     return $errors;
 }
 
 /**
+ * Hook to MODIFY user data after validation but before creation.
+ * This function runs only if the validation above passes.
+ *
+ * @param stdClass &$user The user object, passed by reference.
+ */
+function local_cpf_validator_post_signup_requests(&$user) {
+    // Check if the setting to clean the CPF is enabled.
+    if (get_config('local_cpf_validator', 'format_rules') === 'numeric_with_special_chars_and_clean') {
+        if (isset($user->username)) {
+            // Clean the username (CPF) by removing non-digit characters.
+            $user->username = preg_replace('/[^\d]/', '', $user->username);
+        }
+    }
+}
+
+/**
  * Helper function to validate a CPF number.
  *
  * @param string $cpf
- * @return bool
+ * @return bool|string True if valid, or a string identifier for the error.
  */
 function local_cpf_validator_validate_cpf($cpf) {
-    
-    // Find if has only numbers
-    if (!preg_match('/^\d+$/', $cpf)) {
-        return false;
+    $originalcpf = $cpf;
+    $cleancpf = preg_replace('/[^\d]/', '', $originalcpf);
+
+    $format_rules = get_config('local_cpf_validator', 'format_rules');
+
+    if ($format_rules == 'numeric_with_special_chars') {
+        if (!preg_match('/^\d{3}\.\d{3}\.\d{3}-\d{2}$/', $originalcpf)) {
+            return 'error_cpf_format_special_chars'; 
+        }
+    } else if ($format_rules == 'numeric_only') {
+        if (!preg_match('/^\d{11}$/', $originalcpf)) {
+            return 'error_cpf_format_numeric'; 
+        }
     }
     
-    // Must have 11 digits and not be all identical
-    if (strlen($cpf) != 11 || preg_match('/^(.)\1{10}$/', $cpf)) {
-        return false;
+    if (strlen($cleancpf) != 11 || preg_match('/^(.)\1{10}$/', $cleancpf)) {
+        return 'error_cpf_invalid';
     }
 
     for ($t = 9; $t < 11; $t++) {
         $d = 0;
         for ($c = 0; $c < $t; $c++) {
-            $d += $cpf[$c] * (($t + 1) - $c);
+            $d += $cleancpf[$c] * (($t + 1) - $c);
         }
         $d = ((10 * $d) % 11) % 10;
-        if ($cpf[$c] != $d) {
-            return false;
+        if ($cleancpf[$c] != $d) {
+            return 'error_cpf_invalid';
         }
     }
 

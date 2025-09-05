@@ -24,4 +24,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = [];
+$capabilities = [
+    'local/cpf_validator:settings' => [
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+        ],
+    ],
+];
