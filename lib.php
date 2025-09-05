@@ -50,9 +50,12 @@ function local_cpf_validator_validate_extend_signup_form($data) {
  * @return bool
  */
 function local_cpf_validator_validate_cpf($cpf) {
-    // Remove any non-numeric characters
-    $cpf = preg_replace('/[^0-9]/', '', $cpf);
-
+    
+    // Find if has only numbers
+    if (!preg_match('/^\d+$/', $cpf)) {
+        return false;
+    }
+    
     // Must have 11 digits and not be all identical
     if (strlen($cpf) != 11 || preg_match('/^(.)\1{10}$/', $cpf)) {
         return false;

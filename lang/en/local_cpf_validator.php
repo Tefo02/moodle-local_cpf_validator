@@ -26,4 +26,4 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'CPF Validator';
-$string['invalidcpf'] = 'The provided CPF is not valid. Please check.';
+$string['invalidcpf'] = 'The provided CPF is not valid. Only numbers are allowed.';
