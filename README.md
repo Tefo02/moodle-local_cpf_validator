@@ -16,7 +16,7 @@ This Moodle plugin adds robust and configurable server-side validation for Brazi
 1.  Clone or download this repository into the `/local/` directory of your Moodle installation:
     ```bash
     cd /path/to/your/moodle/local
-    git clone [https://github.com/Tefo02/moodle-local_cpf_validator.git](https://github.com/Tefo02/moodle-local_cpf_validator.git) cpf_validator
+    git clone https://github.com/Tefo02/moodle-local_cpf_validator.git cpf_validator
     ```
 2.  Log in to your Moodle site as an administrator and go to **Site administration > Notifications** to complete the installation process.
 
