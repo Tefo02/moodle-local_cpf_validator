@@ -24,8 +24,6 @@
 
 namespace local_cpf_validator\privacy;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Null privacy provider.
  *
