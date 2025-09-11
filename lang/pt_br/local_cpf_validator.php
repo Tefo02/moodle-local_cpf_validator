@@ -25,6 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['cpf_validator:settings'] = 'Gerenciar as configurações do Validador de CPF';
 $string['error_cpf_format_numeric'] = 'O CPF deve conter apenas 11 números.';
 $string['error_cpf_format_special_chars'] = 'O CPF deve estar no formato 000.000.000-00.';
 $string['error_cpf_invalid'] = 'O CPF é matematicamente inválido. Por favor, verifique os dígitos.';

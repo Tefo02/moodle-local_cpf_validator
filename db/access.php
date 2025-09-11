@@ -25,7 +25,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = [
-    // Capability to manage the settings of this plugin.
     'local/cpf_validator:settings' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
@@ -34,3 +33,4 @@ $capabilities = [
         ],
     ],
 ];
+
