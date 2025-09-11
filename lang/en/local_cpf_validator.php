@@ -35,4 +35,5 @@ $string['numeric_only'] = 'Only Numbers';
 $string['numeric_with_special_chars'] = 'Numbers + Dot and Hyphen';
 $string['numeric_with_special_chars_and_clean'] = 'Numbers + Dot and Hyphen (only numbers will be saved)';
 $string['pluginname'] = 'CPF Validator';
+$string['privacy:metadata'] = 'The CPF Validator plugin validates the username field but does not store any personal data itself.';
 $string['settings'] = 'CPF Validator settings';
