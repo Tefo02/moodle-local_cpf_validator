@@ -58,7 +58,7 @@ function local_cpf_validator_validate_extend_signup_form(array $data): array {
  * is successful. It is used here to clean the CPF number before it is
  * saved to the database if the corresponding setting is enabled.
  *
- * @param stdClass &$user The user data object, passed by reference.
+ * @param stdClass $user The user data object, passed by reference.
  * @return void
  */
 function local_cpf_validator_post_signup_actions(stdClass &$user): void {
@@ -80,7 +80,7 @@ function local_cpf_validator_post_signup_actions(stdClass &$user): void {
  * @return bool|string Returns true if the CPF is valid, otherwise returns the
  * language string identifier for the specific error.
  */
-function local_cpf_validator_validate_cpf(string $cpf): bool|string {
+function local_cpf_validator_validate_cpf(string $cpf) {
     $originalcpf = $cpf;
     $cleancpf = preg_replace('/[^\d]/', '', $originalcpf);
     $formatrules = get_config('local_cpf_validator', 'format_rules');
