@@ -86,6 +86,8 @@ function local_cpf_validator_post_signup_actions(stdClass &$user): void {
  * language string identifier for the specific error.
  */
 function local_cpf_validator_validate_cpf(string $cpf) {
+    global $DB;
+
     if (get_config('local_cpf_validator', 'validate_on_user_creation') != 1) {
         return true; // Skip validation if the setting is disabled.
     }
@@ -106,6 +108,31 @@ function local_cpf_validator_validate_cpf(string $cpf) {
 
     if (strlen($cleancpf) != 11 || preg_match('/^(.)\1{10}$/', $cleancpf)) {
         return 'error_cpf_invalid';
+    }
+
+    $selectedfield = get_config('local_cpf_validator', 'cpf_field');
+    $isunique = true;
+
+    if ($selectedfield === 'username') {
+        if ($DB->record_exists('user', ['username' => $cleancpf])) {
+            $isunique = false;
+        }
+    } else if (strpos($selectedfield, 'profile_field_') === 0) {
+        $shortname = substr($selectedfield, strlen('profile_field_'));
+        if ($field = $DB->get_record('user_info_field', ['shortname' => $shortname])) {
+            list($textsql, $textparams) = $DB->get_in_or_equal([$cleancpf], SQL_PARAMS_NAMED, 'data');
+
+            $sql = "SELECT id FROM {user_info_data} WHERE fieldid = :fieldid AND data " . $textsql;
+            $params = array_merge(['fieldid' => $field->id], $textparams);
+
+            if ($DB->record_exists_sql($sql, $params)) {
+                $isunique = false;
+            }
+        }
+    }
+
+    if (!$isunique) {
+        return 'error_cpf_in_use';
     }
 
     for ($t = 9; $t < 11; $t++) {

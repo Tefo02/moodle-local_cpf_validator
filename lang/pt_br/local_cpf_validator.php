@@ -31,6 +31,7 @@ $string['cpf_field_desc'] = 'Selecione o campo do perfil do usuário onde o CPF 
 $string['cpf_validator:settings'] = 'Gerenciar as configurações do Validador de CPF';
 $string['error_cpf_format_numeric'] = 'O CPF deve conter apenas 11 números.';
 $string['error_cpf_format_special_chars'] = 'O CPF deve estar no formato 000.000.000-00.';
+$string['error_cpf_in_use'] = 'O CPF informado é inválido.';
 $string['error_cpf_invalid'] = 'O CPF é matematicamente inválido. Por favor, verifique os dígitos.';
 $string['error_cpf_required'] = 'O campo CPF é obrigatório.';
 $string['format_rules'] = 'Formato de Entrada';
