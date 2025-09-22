@@ -25,6 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['cpf_field'] = 'CPF Field';
+$string['cpf_field_desc'] = 'Select the user profile field where the CPF will be validated.';
 $string['cpf_validator:settings'] = 'Manage CPF Validator settings';
 $string['error_cpf_format_numeric'] = 'The CPF must contain only 11 numbers.';
 $string['error_cpf_format_special_chars'] = 'The CPF must be in the format 000.000.000-00.';

@@ -22,6 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_bigbluebuttonbn\external\get_recordings;
+
 defined('MOODLE_INTERNAL') || die();
 
 // This line ensures that this code only runs for users who have permission to configure the site.
@@ -39,6 +41,21 @@ if ($hassiteconfig) {
         1
     );
 
+    $settings->add($setting);
+
+    $choices = ['username' => get_string('username')];
+    $customprofilefields = $DB->get_records('user_info_field', ['datatype' => 'text']);
+    foreach ($customprofilefields as $field) {
+        $choices['profile_field_' . $field->shortname] = $field->name;
+    }
+
+    $setting = new admin_setting_configselect(
+        'local_cpf_validator/cpf_field',
+        get_string('cpf_field', 'local_cpf_validator'),
+        get_string('cpf_field_desc', 'local_cpf_validator'),
+        'username',
+        $choices
+    );
     $settings->add($setting);
 
     // Creates the dropdown menu setting for the CPF format rules.

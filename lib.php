@@ -37,17 +37,21 @@
 function local_cpf_validator_validate_extend_signup_form(array $data): array {
     $errors = [];
 
-    if (empty($data['username'])) {
-        $errors['username'] = get_string('error_cpf_required', 'local_cpf_validator');
+    $selectedfield = get_config('local_cpf_validator', 'cpf_field');
+
+    if (empty($data[$selectedfield])) {
+        $errors[$selectedfield] = get_string('error_cpf_required', 'local_cpf_validator');
     } else {
-        $validationresult = local_cpf_validator_validate_cpf($data['username']);
+        $validationresult = local_cpf_validator_validate_cpf($data[$selectedfield]);
+
         if ($validationresult !== true) {
-            $errors['username'] = get_string($validationresult, 'local_cpf_validator');
+            $errors[$selectedfield] = get_string($validationresult, 'local_cpf_validator');
         }
     }
 
     return $errors;
 }
+
 
 /**
  * Hook to modify user data after validation but before user creation.
@@ -60,11 +64,14 @@ function local_cpf_validator_validate_extend_signup_form(array $data): array {
  * @return void
  */
 function local_cpf_validator_post_signup_actions(stdClass &$user): void {
-    if (get_config('local_cpf_validator', 'format_rules') === 'numeric_with_special_chars_and_clean') {
-        if (isset($user->username)) {
-            // Because $user is passed by reference, this change becomes permanent for the user creation process.
-            $user->username = preg_replace('/[^\d]/', '', $user->username);
-        }
+    $selectedfields = get_config('local_cpf_validator', 'cpf_field');
+
+    if (!$selectedfields) {
+        return;
+    }
+
+    if (isset($user->{$selectedfields}) && is_string($user->{$selectedfields})) {
+        $user->{$selectedfields} = preg_replace('/[^\d]/', '', $user->{$selectedfields});
     }
 }
 
