@@ -38,3 +38,5 @@ $string['numeric_with_special_chars_and_clean'] = 'Numbers + Dot and Hyphen (onl
 $string['pluginname'] = 'CPF Validator';
 $string['privacy:metadata'] = 'The CPF Validator plugin validates the username field but does not store any personal data itself.';
 $string['settings'] = 'CPF Validator settings';
+$string['validate_on_user_creation'] = 'Validate CPF on user creation';
+$string['validate_on_user_creation_desc'] = 'If enabled, the CPF will be validated when a new user is created.';

@@ -79,6 +79,10 @@ function local_cpf_validator_post_signup_actions(stdClass &$user): void {
  * language string identifier for the specific error.
  */
 function local_cpf_validator_validate_cpf(string $cpf) {
+    if (get_config('local_cpf_validator', 'validate_on_user_creation') != 1) {
+        return true; // Skip validation if the setting is disabled.
+    }
+
     $originalcpf = $cpf;
     $cleancpf = preg_replace('/[^\d]/', '', $originalcpf);
     $formatrules = get_config('local_cpf_validator', 'format_rules');

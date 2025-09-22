@@ -38,3 +38,5 @@ $string['numeric_with_special_chars_and_clean'] = 'Números + Ponto e Hífen (ap
 $string['pluginname'] = 'Validador de CPF';
 $string['privacy:metadata'] = 'O plugin Validador de CPF valida o campo de nome de usuário durante o cadastro, mas não armazena nenhum dado pessoal.';
 $string['settings'] = 'Configurações do Validador de CPF';
+$string['validate_on_user_creation'] = 'Validar CPF na criação do usuário';
+$string['validate_on_user_creation_desc'] = 'Se ativado, o CPF será validado quando um novo usuário for criado.';

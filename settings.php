@@ -32,6 +32,15 @@ if ($hassiteconfig) {
         get_string('pluginname', 'local_cpf_validator')
     );
 
+    $setting = new admin_setting_configcheckbox(
+        'local_cpf_validator/validate_on_user_creation',
+        get_string('validate_on_user_creation', 'local_cpf_validator'),
+        get_string('validate_on_user_creation_desc', 'local_cpf_validator'),
+        1
+    );
+
+    $settings->add($setting);
+
     // Creates the dropdown menu setting for the CPF format rules.
     $setting = new admin_setting_configselect(
         'local_cpf_validator/format_rules',
